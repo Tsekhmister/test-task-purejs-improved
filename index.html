@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test task</title>
+  </head>
+  <body>
+    <script>
+      function addCss(element, style) {
+        for (const property in style) element.style[property] = style[property];
+      }
+
+      function togglePosition(event) {
+        const clickedDiv = event.target;
+        const currentIndex = Array.from(document.body.children).indexOf(
+          clickedDiv
+        );
+
+        const originalIndex = clickedDiv.dataset.originalIndex;
+
+        if (originalIndex === undefined) {
+          clickedDiv.dataset.originalIndex = currentIndex;
+
+          const firstDiv = document.body.firstElementChild;
+
+          document.body.insertBefore(clickedDiv, firstDiv);
+        } else {
+          const originalSibling = document.body.children[originalIndex];
+
+          document.body.insertBefore(
+            clickedDiv,
+            originalSibling.nextElementSibling
+          );
+
+          clickedDiv.removeAttribute("data-original-index");
+        }
+      }
+
+      for (let i = 0; i <= 100; i++) {
+        const div = document.createElement("div");
+        div.innerText = `Div ${i}`;
+
+        div.addEventListener("click", togglePosition);
+
+        document.body.appendChild(div);
+
+        addCss(div, {
+          height: "100px",
+          width: "100px",
+          "background-color": `rgba(${255 / i}, ${255 - i}, 0, 0.3)`,
+          border: "1px solid black",
+          position: "relative",
+          "box-sizing": "border-box",
+          display: "flex",
+          "justify-content": "center",
+          "align-items": "center",
+          cursor: "pointer",
+        });
+
+        addCss(document.body, {
+          display: "flex",
+          "flex-wrap": "wrap",
+        });
+      }
+    </script>
+  </body>
+</html>
